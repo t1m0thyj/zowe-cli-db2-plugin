@@ -1,0 +1,30 @@
+name: Smoke Test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-latest]
+
+    steps:
+    - name: Install package
+      run: npm install ibm_db
+
+    - name: Check environment
+      run: |
+        uname
+        uname -m
+        node -v
+        npm ls ibm_db
+        db2level
+        echo $IBM_DB_HOME
+        echo $PATH
+        echo $LD_LIBRARY_PATH $DYLD_LIBRARY_PATH
+
+    - name: Execute package
+      run: node -e "require('ibm_db')"
